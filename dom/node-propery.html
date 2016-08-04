@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Node Propery</title>
+</head>
+
+							  Node
+						/	   |		\
+					Text	Element		Comment
+					          /  \
+				   HTMLElement	  SVGElement
+ 					|
+ 					|_HTMLInputElements
+ 					|_HTMLAnchorElements
+ 					|_HTMLBodyElements
+
+
+
+<body>
+	От HTMLElement уже наследуют разнообразные узлы HTML:
+	Для <input> – HTMLInputElement
+	Для <body> – HTMLBodyElement
+	Для <a> – HTMLAnchorElement… и так далее.
+
+	Мы работаем всего с двумя типами узлов:
+	Элемент.
+	Текстовый узел.
+
+
+	nodeType
+	interface Node {
+	  // Всевозможные значения nodeType
+	  const unsigned short ELEMENT_NODE = 1;
+	  const unsigned short ATTRIBUTE_NODE = 2;
+	  const unsigned short TEXT_NODE = 3;
+	  const unsigned short CDATA_SECTION_NODE = 4;
+	  const unsigned short ENTITY_REFERENCE_NODE = 5;
+	  const unsigned short ENTITY_NODE = 6;
+	  const unsigned short PROCESSING_INSTRUCTION_NODE = 7;
+	  const unsigned short COMMENT_NODE = 8;
+	  const unsigned short DOCUMENT_NODE = 9;
+	  const unsigned short DOCUMENT_TYPE_NODE = 10;
+	  const unsigned short DOCUMENT_FRAGMENT_NODE = 11;
+	  const unsigned short NOTATION_NODE = 12;
+	  ...
+	}
+
+<script>
+	alert( document.body.nodeName ); // BODY
+	alert( document.body.tagName ); // BODY
+</script>
+	Разница между nodeName и tagName
+	Свойство tagName есть только у элементов Element (в IE8- также у комментариев, но это ошибка в браузере).
+	Свойство nodeName определено для любых узлов Node, для элементов оно равно tagName, а для не-элементов обычно содержит строку с типом узла.
+
+<script>
+	<body>
+	  <!-- комментарий -->
+
+	  <script>
+	    // для комментария
+	    alert( document.body.firstChild.nodeName ); // #comment
+	    alert( document.body.firstChild.tagName ); // undefined (в IE8- воскл. знак "!")
+
+	    // для документа
+	    alert( document.nodeName ); // #document, т.к. корень DOM -- не элемент
+	    alert( document.tagName ); // undefined
+	  </script>
+	</body>
+</script>
+
+
+	Свойство innerHTML - читает/записывает HTML содержимое
+	Закрывает незакрытые тэги
+
+<script>
+	alert(document.body.innerHTML);
+	document.body.innerHTML = 'Hello world';
+</script>
+
+	Тонкости работы с innerHTML
+
+	- Для таблиц в IE9- – innerHTML только для чтения
+	- Добавление innerHTML+= осуществляет перезапись (перезагрузятся старые и добавятся новые)
+	- Скрипты не выполняются (Исключение – IE9-, в нем вставляемый скрипт выполняется, если у него есть атрибут defer)
+	- IE8- обрезает style и script в начале innerHTML
+
+	Свойства outerHTML - содержит HTML элемента целиком
+	При записи создает новый элемент. При этом переменная, в которой изначально был старый элемент, и в которой мы «перезаписали» outerHTML, остаётся со старым элементом.
+
+
+	Свойство innerHTML есть только у узлов-элементов.
+
+	Содержимое других узлов, например, текстовых или комментариев, доступно на чтение и запись через свойство data.
+<!-- Пример data -->
+	<body>
+	  Привет
+	  <!-- Комментарий -->
+	  <script>
+	    for (var i = 0; i < document.body.childNodes.length; i++) {
+	      alert( document.body.childNodes[i].data );
+	    }
+	  </script>
+	  Пока
+	</body>
+
+	
+	Свойство textContent содержит только текст внутри элемента. Иными словами, elem.textContent возвращает конкатенацию всех текстовых узлов внутри elem. Можно использовать как защиту от тегов инфомрации введнной от пользователя
+
+	Всеми браузерами, кроме Firefox, поддерживается нестандартное свойство innerText. Это свойство возвращает текст не в том виде, в котором он в DOM, а в том, в котором он виден – как если бы мы выбрали содержимое элемента мышкой и скопировали его. В частности, если элемент невидим, то его текст возвращён не будет. Это довольно странная особенность существует по историческим причинам и скорее мешает, чем помогает.
+
+
+
+	Как правило, видим или невидим узел, определяется через CSS, свойствами display или visibility.
+
+	В стандарте HTML5 предусмотрен специальный атрибут и свойство для этого: hidden.
+    
+    <!-- пример со свойством hidden -->
+    <div>Текст</div>
+	<div hidden>С атрибутом hidden</div>
+	<div>Со свойством hidden</div>
+
+	<script>
+	  var lastDiv = document.body.children[2];
+	  lastDiv.hidden = true;
+	</script>
+
+	Атрибуты элемента доступны сазу document.body.children[2].<атрибут>
+
+
+	ИТОГО
+	Основные свойства DOM-узлов:
+	nodeType
+	Тип узла. Самые популярные типы: "1" – для элементов и "3" – для текстовых узлов. Только для чтения.
+	nodeName/tagName
+	Название тега заглавными буквами. nodeName имеет специальные значения для узлов-неэлементов. Только для чтения.
+	innerHTML
+	Внутреннее содержимое узла-элемента в виде HTML. Можно изменять.
+	outerHTML
+	Полный HTML узла-элемента. При записи в elem.outerHTML переменная elem сохраняет старый узел.
+	nodeValue/data
+	Содержимое текстового узла или комментария. Свойство nodeValue также определено и для других типов узлов. Можно изменять. На некоторых узлах, где data нет, nodeValue есть и имеет значение null, поэтому лучше использовать data.
+	textContent
+	Содержит только текст внутри элемента, за вычетом всех тегов. Можно использовать для защиты от вставки произвольного HTML кода
+	Свойство и атрибут hidden
+	Скрыть элемент можно с помощью установки свойства hidden в true или с помощью атрибута
+	Узлы DOM также имеют другие свойства, в зависимости от тега. Например, у INPUT есть свойства value и checked, а у A есть href и т.д. Мы рассмотрим их далее.
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	Вызов obj instanceof Constructor возвращает true, если объект принадлежит классу Constructor или классу, наследующему от него.
+	Оператор instanceof особенно востребован в случаях, когда мы работаем с иерархиями классов. Это наилучший способ проверить принадлежность тому или иному классу с учётом наследования.
+
+	<script>
+	function Rabbit() {}
+
+	// создаём объект
+	var rabbit = new Rabbit();
+
+	// проверяем -- этот объект создан Rabbit?
+	alert( rabbit instanceof Rabbit ); // true, верно
+	</script>
+
+	Алгоритм проверки obj instanceof Constructor:
+
+	1. Получить obj.__proto__
+	2. Сравнить obj.__proto__ с Constructor.prototype
+	3. Если не совпадает, тогда заменить obj на obj.__proto__ и повторить проверку на шаге 2 до тех пор, пока либо не найдется совпадение (результат true), либо цепочка прототипов не закончится (результат false).
+	
+
+	<script>
+	// Создаём объект rabbit, как обычно
+	function Rabbit() {}
+	var rabbit = new Rabbit();
+
+	// изменили prototype...
+	Rabbit.prototype = {};
+
+	// ...instanceof перестал работать!
+	alert( rabbit instanceof Rabbit ); // false
+	</script>
+	Стоит ли говорить, что это один из доводов для того, чтобы никогда не менять prototype? Так сказать, во избежание.
+	Оператор instanceof не срабатывает, когда значение приходит из другого окна или фрейма.
+
+
+</body>
+</html>

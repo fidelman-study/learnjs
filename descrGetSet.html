@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Дескриптор геттер сеттер</title>
+</head>
+<body>
+	<script>
+		Object.defineProperty(obj, prop, descriptor);
+		// obj - объект
+		// prop - свойство в ковычках
+		var descriptor = {
+			value: , //значение свойства, по умолчанию undefined
+			writable: , //значение свойства можно менять, если true. По умолчанию false.
+			configurable: , //если true, то свойство можно удалять, а также менять его в дальнейшем при помощи новых вызовов defineProperty. По умолчанию false.
+			enumerable: , // если true, то свойство просматривается в цикле for..in и методе Object.keys(). По умолчанию false.
+			get: , // функция, которая возвращает значение свойства. По умолчанию undefined.
+			set:  // функция, которая записывает значение свойства. По умолчанию undefined.
+
+			//Чтобы избежать конфликта, запрещено одновременно указывать значение value и функции get/set. Либо значение, либо функции для его чтения-записи, одно из двух. Также запрещено и не имеет смысла указывать writable при наличии get/set-функций.
+		};
+
+		// невыполнение какого либо свойства из объекта descriptor в strict mode приведет к ошибке
+		// defineProperty не перезаписывает а модицицирует
+	</script>
+	<script>
+		// get/set без Object.definePropery
+		var user = {
+		  firstName: "Вася",
+		  surname: "Петров",
+
+		  get fullName() {
+		    return this.firstName + ' ' + this.surname;
+		  },
+
+		  set fullName(value) {
+		    var split = value.split(' ');
+		    this.firstName = split[0];
+		    this.surname = split[1];
+		  }
+		};
+	</script>
+	<script>
+		Object.defineProperties(obj, descriptors) //позволяет объявить сразу несколько свойств
+		Object.defineProperties(user, {
+			firstName: {
+				value: 'Andrei',
+			},
+			secondName: {
+				value: 'Andrei',
+			}
+		});
+	</script>
+	<p>Другие методы работы со свойствами</p>
+	<script>
+		//Возвращают массив – список свойств объекта.
+		Object.keys(obj)// - возвращает только enumerable-свойства. 
+		Object.getOwnPropertyNames(obj)// - возвращает все свойства
+
+		Object.getOwnPropertyDescriptor(obj, prop)// - возвращают дескриптор
+
+		Object.preventExtensions(obj)// - запрещает добавлять новые свойства
+		Object.isExtensible(obj) // true если запрещено добавлять новые свойства
+
+		Object.seal(obj)// запрещает добавление и удаление свойств - все свойства configurable: false
+		Object.isSealed(obj)
+
+		Object.freeze(obj)// запрещает добавление, удаление и изменение всех свойства - writable: false, configurable: false
+		Object.isFrozen(obj)
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>let and const</title>
+</head>
+<body>
+	
+	отличия let от var:
+
+	1. область видимости let это блок {...}
+	<script>
+	var a = 5;
+
+	if (a) {
+		var a = 10;
+
+		alert(a); // 10
+	}
+
+	alert(a); //10
+	</script>
+	<script>
+	'use strict';
+	let a = 5;
+
+	if (a) {
+		let a = 10;
+
+		alert(a); // 10
+	}
+
+	alert(a); // 5
+	</script>
+
+	2. let видна только после объявления
+	<script>
+	alert(a); // undefined
+
+	var a = 5;
+	</script>
+	<script>
+	'use strict';
+	alert(a); // error
+
+	let a = 5;
+	</script>
+
+	Нельзя создавать одинаковых переменных
+	<script>
+	'use strict';
+	let x;
+	let x; // error
+	</script>
+	
+	3. При объявлении переменной в цикле for(let …) – она видна только в этом цикле. Причём каждой итерации соответствует своя переменная let.
+	
+	Решает задачу армия функций
+	<script>
+	'use strict';
+	function makeArmy() {
+		let shooters = [];
+
+		for(let i = 0; i < 10; i++) {
+			shooters.push(function() {
+				alert(i);
+			});
+		}
+		return shooters;
+	}
+	var army = new makeArmy();
+	army[0](); // 5
+	army[5](); // 0
+	</script>
+
+
+
+	Const - переменная, которую нельзя менять
+	<script>
+	'use strict';
+	const a = 5;
+	a = 1; // error
+	</script>
+	В сотальном const аналогичная let
+
+	Защищена сама константа, но не свойства внутри нее
+	<script>
+	'use strict';
+	const obj = {
+		name: 'Andrey'
+	}
+	obj.name = 'hi'; // good
+	obj = 3; // error
+	</script>
+	Константы, которые жестко заданы всегда пишутся в верхнем регистре
+
+
+
+
+</body>
+</html>

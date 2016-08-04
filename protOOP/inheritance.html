@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function Animal(name) {
+		  this.name = name;
+		  this.speed = 0;
+		}
+
+		Animal.prototype.run = function(speed) {
+		  this.speed += speed;
+		  alert( this.name + ' бежит, скорость ' + this.speed );
+		};
+
+		Animal.prototype.stop = function() {
+		  this.speed = 0;
+		  alert( this.name + ' стоит' );
+		};
+	</script>
+
+	<script>
+		function Rabbit(name) {
+		  this.name = name;
+		  this.speed = 0;
+		}
+
+		Rabbit.prototype.jump = function() {
+		  this.speed++;
+		  alert( this.name + ' прыгает' );
+		};
+
+		var rabbit = new Rabbit('Кроль');
+	</script>
+
+	<script>
+		Rabbit.prototype.__proto__ = Animal.prototype;
+
+		// либо для IE-10
+		Rabbit.prototype = Object.create(Animal.prototype); // cтавится после конструктора, так как перезапишет прототип
+
+		
+		// Желательно и constructor сохранить
+		Rabbit.prototype.constructor = Rabbit;
+	</script>
+
+	<script>
+	// вместо Rabbit.prototype = Object.create(Animal.prototype)
+	Rabbit.prototype = new Animal();
+	// так делать не рекомендуется, так как мы хотим унаследовать методы а не создавать новый объект
+	</script>
+
+
+
+	<script>
+	function Animal(name) {
+	  this.name = name;
+	  this.speed = 0;
+	}
+
+	function Rabbit(name) {
+	  this.name = name;
+	  this.speed = 0;
+	}
+
+	// если конструкторы одинаковы то можно заменить содержание конструктора Rabbit на 
+	function Rabbit(name) {
+		Animal.apply(this, arguments);
+	}
+
+	</script>
+
+	Мы можем свободно создать методы как у прототипа для своих целей
+
+	Можем расширять мтеоды прототипа
+	<script>
+	Rabbit.prototype.run = function() {
+		Animal.prototype.run.apply(this, arguments);
+		this.jump();
+	};
+	</script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<!--START Синхронность и асинхронность зарузки -->
+
+	<p>Считаем кроликов</p>
+	<script src="async.js"></script>
+	<p>Кролики подсчитаны</p>
+
+	<!-- Описание -->
+	<!-- async - браузер не останавливается при просмотре, а асинхронно начинает скачивать, как скачается - выполнится -->
+	<!-- defer - как async, но сохраняя порядок. И выполнится после всей прогрузки страницы. -->
+	<!-- если указать async и defer вместе, то выполнится только async, при IE9- выполнится defer, так как не понимает async -->
+	<!-- Возможно назначение только на внешние скрипты -->
+	<!--END Синхронность и асинхронность зарузки -->
+
+	<!--START Подгрузка скрипта -->
+	<script>
+		function addScript(src) {
+			var script = document.createElement('script');
+			script.src = src;
+			script.async = false; // true - async, false - defer
+			document.head.appendChild(script);
+		}
+		addScript('async.js');
+	</script>
+	<!--END Подгрузка скрипта -->
+
+
+
+
+</body>
+</html>

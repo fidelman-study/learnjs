@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Destructuring Assignment</title>
+</head>
+<body>
+
+
+	Деструктуризация (destructuring assignment) – это особый синтаксис присваивания, при котором можно присвоить массив или объект сразу нескольким переменным, разбив его на части.
+	
+	let {prop : varName = default, ...} = object
+
+	Для массивов имеет значение порядок, поэтому нельзя использовать :, но значение по умолчанию – можно:
+	
+	let [var1 = default, var2, ...rest] = array
+
+	<script>
+	'use strict';
+	let {firstName, lastName} = ['Andrei', 'Fidelman'];
+	alert(lastName); // Fidelman
+
+	let { , , title} = ['Там пам срам кнам'].split(' ');
+	alert(title); // срам
+
+	</script>
+
+	Если мы хотим получить и последующие значения массива, но не уверены в их числе – можно добавить ещё один параметр, который получит «всё остальное», при помощи оператора "..." («spread», троеточие):
+
+	<script>
+	'use strict';
+	let {hi, hlop, ...rest} = ['Хочешь этих булочек сейчас покушать с кофем'].split(' ');
+	alert(rest); // булочек,сейчас,покушать,с,кофем
+	</script>
+	Значением rest будет массив из оставшихся элементов массива. Вместо rest можно использовать и другое имя переменной, оператор здесь – троеточие. Оно должно стоять только последним элементом в списке слева.
+	
+
+	Значения по умолчанию
+	<script>
+	'use strict';
+	let {first, second} = [];
+	alert(first); // undefined
+	</script>
+	<script>
+	'user strict';
+	let {first='hi', second='hello'} = [];
+	alert(first); // hi
+	</script>
+
+	Кроме примитивов по умолчанию можно использовать и выражения
+	<script>
+	var summ1and2 = function() {
+		return 1 + 2;
+	}
+	let {name, old=summ1and2()} = ['Вася'];
+	alert(old); // 3
+	</script>
+	Заметим, что вызов функции defaultLastName() для генерации значения по умолчанию будет осуществлён только при необходимости, то есть если значения нет в массиве.
+
+	Деструктуризация объекта
+	<script>
+	'use strict';
+
+	let options = {
+		title: 'hi',
+		width: '100px',
+		height: '200px'
+	};
+
+	let {title, width, height} = options;
+	alert(width); // 100px
+	</script>
+
+	Если мы хотим изменить название переменных
+	<script>
+	'user strict';
+
+	let options = {
+		title: 'hi',
+		width: '100px',
+		height: '200px'
+	};
+
+	let {title: t, width: w, height: h} = options;
+	alert(w); // 100px
+	</script>
+	Если каких либо свойст нету, то так же можно указать по умолчанию
+
+	<script>
+	'user strict';
+
+	let options = {
+		title: 'hi',
+		width: '100px',
+		height: '200px'
+	};
+
+	let {title: t, width: w='150px', height: h, color='#fff'} = options;
+	alert(color); // #fff
+	</script>
+
+	В следующем стандарте можно будет сохранять остаток как в массивах ...rest
+
+	Ошибки изза объявления блока для let {...}
+	<script>
+	let a,b;
+	{a, b} = {a: 5, b: 3}; // error
+	</script>
+	Решение
+	<script>
+	let a,b;
+	({a, b} = {a: 5, b: 3}); // error
+	</script>
+
+	Вложенные деструкторизации
+
+	Если объект или массив содержат другие объекты или массивы, и их тоже хочется разбить на переменные – не проблема.
+
+	Деструктуризации можно как угодно сочетать и вкладывать друг в друга.
+
+	В коде ниже options содержит подобъект и подмассив. В деструктуризации ниже сохраняется та же структура:
+
+	<script>
+	'use strict';
+
+	let options = {
+		size: {
+			width: 100,
+			height: 200
+		},
+		items: ['Пончик', 'Булочка'];
+	};
+
+	let {title='Меню', size: {width, height}, items: [item1, item2]} = options;
+	alert(title); // Меню
+	alert(width); // 100
+	</script>
+
+	Деструктуризация позволяет разбивать объект или массив на переменные при присвоении.
+
+
+
+
+
+</body>
+</html>

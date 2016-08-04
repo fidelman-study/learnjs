@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JSON</title>
+</head>
+<body>
+	<h1>Методы</h1>
+	<p>JSON.parse – читает объекты из строки в формате JSON.</p>
+	<p>JSON.stringify – превращает объекты в строку в формате JSON, используется, когда нужно из JavaScript передать данные по сети.</p>
+	<p>
+		JavaScript-объекты { ... } или
+		Массивы [ ... ] или
+		Значения одного из типов:
+		строки в двойных кавычках,
+		число,
+		логическое значение true/false,
+		null.
+	</p>
+	<p>Объекты в формате JSON похожи на обычные JavaScript-объекты, но отличаются от них более строгими требованиями к строкам – они должны быть именно в двойных кавычках.</p>
+
+	<p>Для интеллектуального восстановления из строки у JSON.parse(str, reviver) есть второй параметр reviver, который является функцией function(key, value).</p>
+	<script>
+	// дата в строке - в формате UTC
+	var str = '{"title":"Конференция","date":"2014-11-30T12:00:00.000Z"}';
+
+	var event = JSON.parse(str, function(key, value) {
+	  if (key == 'date') return new Date(value);
+	  return value;
+	});
+
+	alert( event.date.getDate() ); // теперь сработает!
+	</script>
+	<p>JSON.stringify(value, replacer, space)</p>
+	<p>value - значение для преобразования в JSON</p>
+	<p>replacer - массив свойств, которые подлежат сериализации.</p>
+	<p>space - при уровнях вложенности указывать количество пробелов</p>
+</body>
+</html>

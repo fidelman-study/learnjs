@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>call apply</title>
+</head>
+<body>
+	<p>Call - вызов функции с явным указанияем this</p>
+	<p>Синтаксис - func.call(context, arg1, arg2, ...)</p>
+	<p>context - это список(объект) - !!!this!!!</p>
+	<p>arg1 - свойства обекта необзодимые в функции, задаются через запятую</p>
+	<script>
+	// пример
+	var user = {
+	  firstName: "Василий",
+	  surname: "Петров",
+	  patronym: "Иванович"
+	};
+
+	function showFullName(firstPart, lastPart) {
+	  alert( this[firstPart] + " " + this[lastPart] );
+	}
+
+	// f.call(контекст, аргумент1, аргумент2, ...)
+	showFullName.call(user, 'firstName', 'surname') // "Василий Петров"
+	showFullName.call(user, 'firstName', 'patronym') // "Василий Иванович"
+	</script>
+
+
+	<script>
+		// одалживание метода
+		arguments.join = [].join;// так нельзя, так как может перезаписаться собственный метод
+		var argStr = join.call(arguments, ':');
+		// при одалживании мутода, убедись, что метод выполнится без ошибок
+		var args = [].slice.call(arguments); // создание массива из arguments
+	</script>	
+
+	<script>
+	func.call(context, arg1, arg2);
+	// идентичен вызову
+	func.apply(context, [arg1, arg2]);
+	</script>
+	<p>apply - когда мы не знаем количество аргументов - аргументы задаются черех массив</p>
+	<script>
+		// null - потому что не использует this
+		Math.max.apply(null, arr)
+	</script>
+</body>
+</html>

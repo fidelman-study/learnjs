@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Function</title>
+</head>
+<body>
+	
+	Параметры по умолчанию
+
+	<script>
+	function showMenu(title = 'Без заголовка', width = 100, height = 200) {
+		alert(`${title} ${width} ${height}`); // Без заголовка 100 200
+	}
+
+	</script>
+
+	При передаче любого значения, кроме undefined, включая пустую строку, ноль или null, параметр считается переданным, и значение по умолчанию не используется.
+
+	<script>
+	function showMenu(title = "Заголовок", width = 100, height = 200) {
+	  alert(`title=${title} width=${width} height=${height}`);
+	}
+
+	// По умолчанию будут взяты 1 и 3 параметры
+	// title=Заголовок width=null height=200
+	showMenu(undefined, null);
+
+	</script>
+
+	Параметры по умолчанию могут быть не только примитивами, но и выражениями
+
+	<script>
+	function sayHi(who = getCurrentUser().toUpperCase()) {
+	  alert(`Привет, ${who}!`);
+	}
+
+	function getCurrentUser() {
+	  return 'Вася';
+	}
+
+	sayHi(); // Привет, ВАСЯ!
+	</script>
+	
+	Оператор spread вместо arguments
+	<script>
+	function showName(firstName, lastName, ...rest) {
+	  alert(`${firstName} ${lastName} - ${rest}`);
+	}
+
+	// выведет: Юлий Цезарь - Император,Рима
+	showName("Юлий", "Цезарь", "Император", "Рима");
+	</script>
+
+	rest в отличии от arguments является настоящим массивом и имеет методы для массивов forEach, map
+	оператор spread должен передаваться последним
+
+	Выше мы увидели использование ... для чтения параметров в объявлении функции. Но этот же оператор можно использовать и при вызове функции, для передачи массива параметров как списка, например:
+	
+	<script>
+	'use strict';
+
+	let numbers = [2, 3, 15];
+
+	// Оператор ... в вызове передаст массив как список аргументов
+	// Этот вызов аналогичен Math.max(2, 3, 15)
+	let max = Math.max(...numbers);
+
+	alert( max ); // 15
+	</script>
+
+	Деструктуризация в параметрах
+
+	Если функция получает объект она может разбить его на переменные
+
+	<script>
+	'use strict';
+	var options = {
+		title: 'Привет',
+		width: 100,
+		height: 200
+	};
+
+	showMenu(opsions);
+
+	function showMenu({title, width, height}) {
+		alert(`${title} ${width} ${height}`);
+	}
+
+	</script>
+
+	<script>
+	'use strict';
+	function showMenu({title = 'hi', width: w = 100, height: h = 200}) {
+		alert(`${title} ${w} ${h}`);
+	}
+	showMenu();
+
+	</script>
+
+	Имя «name»
+
+	В свойстве name у функции находится её имя.
+	<script>
+	'use strict';
+	function f() {};
+	alert(f.name); // 'f'
+	</script>
+
+	Даже в объекте название функции равно названию функции без объекта
+
+	<script>
+	'use strict';
+
+	let obj = {
+		sayHi: function() {
+			alert(1);
+		}
+	};
+	alert(obj.sayHi.name); // 'sayHi'
+
+	</script>
+
+
+	Функция в блоке
+	
+	Объявление Function Declaration в блоке не видна за пределами этого блока
+
+	<script>
+	'use strict';
+
+	if (true) {
+		function sayHi() {
+			alert('hi!');
+		}
+		sayHi(); // good
+	}
+	sayHi(); // error
+
+	</script>
+
+
+	Функция через =>
+
+	<script>
+	// Пример
+	'use strict';
+
+	let inc = x => x + 1;
+	alert(inc(1)); // 2
+
+	</script>
+
+	<script>
+	// Аналогичны
+	let inc = x => x + 1;
+	let inc = function(x) { return x + 1; };
+	</script>
+
+	<script>
+	'use strict';
+
+	let sum = (a,b) => a + b;
+	let sum = function(a, b) { return a + b; };
+	</script>
+
+	Если не нужно задавать аргументы ставятся пустые круглые скобки
+
+	<script>
+	'use strict';
+
+	let getTime = () => `${new Date().getHours()} : ${new Date().getMinutes()}`;
+	alert(getTime());
+
+	</script>
+
+	Когда тело функции достаточно большое его можно обернуть в фигурные скобки, если хотим чтото вернуть то делаем яный return
+
+	<script>
+	'use strict';
+
+	let getTime = () => {
+		let date = new Date();
+		let hours = date.getHours();
+		let minutes = date.getMinutes();
+		return `${hours} : ${minutes}`;
+	};
+
+	</script>
+
+	Функции стрелки удобны в качестве callback'ов
+
+	<script>
+	'use strict';
+
+	let arr = [5, 8, 3];
+	let sorted = arr.sort( (a, b) => a - b );
+
+	alert(sorted); // 3, 5, 8
+
+	</script>
+
+
+	Функции стрелки не имеют своего this
+
+	Внутри функций-стрелок – тот же this, что и снаружи.
+
+	<script>
+	'use strict';
+
+	let group = {
+		title: 'Наш курс',
+		students: ['Иван', 'Петя', 'Вася'],
+
+		showList: function() {
+			this.students.forEach(
+				(student) => alert(`${this.title}:${student}`);
+			);
+		}
+	};
+	group.showList();
+	// Наш курс: Вася
+	// Наш курс: Петя
+	// Наш курс: Даша
+	</script>
+
+	Если бы в forEach вместо функции-стрелки была обычная функция, то была бы ошибка:
+	При запуске будет "попытка прочитать свойство title у undefined", так как .forEach(f) при запуске f не ставит this. То есть, this внутри forEach будет undefined.
+
+	<script>
+	'use strict';
+
+	let group = {
+		title: 'Наш курс',
+		students: ['Иван', 'Петя', 'Вася'],
+		showList: function() {
+			this.students.forEach(function(student) {
+				alert(`${this.title}:${student}`);
+			});
+		}
+	};
+	group.showList();
+	// Наш курс: Вася
+	// Наш курс: Петя
+	// Наш курс: Даша
+	</script>
+
+	Отсутствие у функции-стрелки "своего this" влечёт за собой естественное ограничение: такие функции нельзя использовать в качестве конструктора, то есть нельзя вызывать через new.
+
+	Есть тонкое различие между функцией стрелкой => и обычной функцией, у которой вызван .bind(this):
+
+	Вызовом .bind(this) мы передаём текущий this, привязывая его к функции.
+	При => привязки не происходит, так как функция стрелка вообще не имеет контекста this. Поиск this в ней осуществляется так же, как и поиск обычной переменной, то есть, выше в замыкании. До появления стандарта ES-2015 такое было невозможно.
+	
+
+	В качестве arguments используются аргументы внешней «обычной» функции.
+
+	<script>
+	'use strict';
+
+	function f() {
+		let showArg = () => alert(arguments[0])
+		showArg();
+	}
+	f(1); // 1
+
+	</script>
+
+
+	Вызов showArg() выведет 1, получив его из аргументов функции f. Функция-стрелка здесь вызвана без параметров, но это не важно: arguments всегда берутся из внешней «обычной» функции.
+
+	Сохранение внешнего this и arguments удобно использовать для форвардинга вызовов и создания декораторов.
+
+	Например, декоратор defer(f, ms) ниже получает функцию f и возвращает обёртку вокруг неё, откладывающую вызов на ms миллисекунд:
+
+	<script>
+	'use strict';
+	function defer(f, ms) {
+		return function() {
+			setTimeout (() => f.apply(this, arguments), ms)
+		}
+	}
+	function sayHi(who) {
+		alert('Привет ' + ${who}`);
+	}
+
+	let sayHiDeffered = defer(sayHi, 2000);
+	sayHiDeffered('Вася');
+
+	</script>
+
+	Аналогичная реализация без функции-стрелки выглядела бы так:
+
+	<script>
+	function defer(f, ms) {
+	  return function() {
+	    let args = arguments;
+	    let ctx = this;
+	    setTimeout(function() {
+	      return f.apply(ctx, args);
+	    }, ms);
+	  }
+	}
+	</script>
+
+	Можно задавать параметры по умолчанию, а также использовать деструктуризацию для чтения приходящего объекта.
+	Оператор spread (троеточие) в объявлении позволяет функции получать оставшиеся аргументы в массив: function f(arg1, arg2, ...rest).
+	Тот же оператор spread в вызове функции позволяет передать её массив как список аргументов (вместо apply).
+	У функции есть свойство name, оно содержит имя, указанное при объявлении функции, либо, если его нет, то имя свойства или переменную, в которую она записана. Есть и некоторые другие ситуации, в которых интерпретатор подставляет «самое подходящее» имя.
+	Объявление Function Declaration в блоке {...} видно только в этом блоке.
+	Появились функции-стрелки:
+	Без фигурных скобок возвращают выражение expr: (args) => expr.
+	С фигурными скобками требуют явного return.
+	Не имеют своих this и arguments, при обращении получают их из окружающего контекста.
+	Не могут быть использованы как конструкторы, с new.
+
+
+
+
+	
+
+
+
+
+
+
+
+
+</body>
+</html>

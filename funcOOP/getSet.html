@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Геттеры и Сеттеры</title>
+</head>
+<body>
+	<p>Для управляемого доступа к сосотоянию объектов используют специальные функции, так называемые "геттеры" и "сеттеры"</p>
+	
+	<script>
+		this.waterAmount = 0; // публичное свойство полностью доступно снаружи - опасно, так как никак не защищено
+
+		// Решение
+
+		var waterAmount = 0; // свойство делается приватным
+		this.setWaterAmount = function(amount) {
+			// проверка
+			// ошибки лучше выводить через
+			throw new Error('');
+
+			waterAmount = amount; // устанавливаем приватное свойства
+		};
+
+
+	</script>
+
+	<script>
+		// сейчас можно изменить свойтсво но нельзя его прочитать
+		// для этого и нужен геттер
+
+		this.getWaterAmount = function() {
+			return waterAmount;
+		};
+	</script>
+
+	<script>
+		// пишем единый геттер - сеттер
+
+
+		this.waterAmount = function(amount) {
+			if (!arguments.length) return waterAmount;
+
+			waterAmount = amount;
+		};
+
+	</script>
+
+
+
+</body>
+</html>

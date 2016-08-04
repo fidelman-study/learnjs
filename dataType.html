@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Data Type</title>
+</head>
+<body>
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+	</head>
+	<body>
+		<p>обычный typeof не может узнать чем различаются по типу массив, объект или дата</p>
+		<p>Секретное свойства toString = {}.toString; toString.call(data); - выведет [object ...]</p>
+		<p>узнать тип таким образом можно только для встроенных объектов</p>
+		<script>
+		var toString = {}.toString;
+ 		// у массив и даты свой мтеод toString поэтому взяли у объекта
+		var arr = [1, 2];
+		alert( toString.call(arr) ); // [object Array]
+
+		var date = new Date;
+		alert( toString.call(date) ); // [object Date]
+
+		var user = { name: "Вася" };
+		alert( toString.call(user) ); // [object Object]
+		</script>
+		<h2>Методы</h2>
+		<p>для проверки массива существует специальный метод</p>
+		<script>
+		Array.isArray([1,2,3]); // true
+		</script>
+		<p>метод позволяет определить создан ли объект данной функцией</p>
+		<script>
+		function User(){};
+		var user = new User;
+		user instanceof User //true
+		</script>
+
+		<p>Утиная типизация - проверка данных на наличие метода, которые принадлежит конкретному типу данных</p>
+		<script>
+		var something = [1, 2, 3];
+
+		if (something.splice) {
+		  alert( 'Это утка! То есть, массив!' );
+		}
+		</script>
+		<p>Для написания полиморфных (это удобно!) функций нам нужна проверка типов</p>
+	</body>
+	</html>
+</body>
+</html>

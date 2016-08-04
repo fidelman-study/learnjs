@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Mixin</title>
+</head>
+<body>
+	Примесь (англ. mixin) – класс или объект, реализующий какое-либо чётко выделенное поведение. Используется для уточнения поведения других классов, не предназначен для самостоятельного использования.
+
+
+	<script>
+		// примесь
+		var sayHiMixin = {
+		  sayHi: function() {
+		    alert("Привет " + this.name);
+		  },
+		  sayBye: function() {
+		    alert("Пока " + this.name);
+		  }
+		};
+
+		// использование:
+		function User(name) {
+		  this.name = name;
+		}
+
+		// передать методы примеси
+		for(var key in sayHiMixin) User.prototype[key] = sayHiMixin[key];
+
+		// User "умеет" sayHi
+		new User("Вася").sayHi(); // Привет Вася
+	</script>
+</body>
+</html>

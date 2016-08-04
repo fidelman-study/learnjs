@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Inheritance</title>
+</head>
+<body>
+	<p>Наследование – это создание новых «классов» на основе существующих.</p>
+
+	<p>Наследование нужно если есть какие либо общие методы</p>
+
+	<p>приватные свойства доступны только в самом объекте, а защищенные для обхекта и его наследников</p>
+
+	<script>
+		// способы
+
+
+		// базовый конструктор
+		function Machine () {
+			var _enabled = false; // так как свойства находится в другой области видиомсти оно является внутренним и именуется с _<name>
+			this.enable = function() { // подчеркивание в начале это общий принятый признак для свойств которые доступны для объекта и его насоледников, так называет защищенные свойства
+				_enabled = true;
+			};
+			this.disabled = function() {
+				_enabled = false;
+			};
+		}
+
+		function CoffeeMachine() {
+			Machine.call(this); // наследуем
+		}
+
+		var coffeMachine = new CoffeeMachine;
+		coffeMachine.enable();
+		alert(this._enabled); 
+
+	</script>
+
+	<script>
+		// перенос приватных свойств в защищенные
+		function Machine(power) {
+			this._power = power;
+		};
+
+		function CoffeMachine(power) {
+			Method.apply(this, arguments);
+			alert(this._power);
+		}
+	</script>
+
+
+	<script>
+		// если мы решили дополнить методы
+		function Machine(power) {
+			this._power = power;
+
+			this.enable = function() {
+				alert('hi');
+			};
+		};
+
+		function CoffeMachine(power) {
+			Method.apply(this, arguments);
+			
+			var parentEnable = this.enable; // запоминаем метод родителя
+			this.enable = function() { // переопределяем
+				parentEnable.call(this); // вставляем метод продителя
+				alert('bye'); // дополняем свой
+			}; 
+
+		}
+
+
+	</script>
+</body>
+</html>

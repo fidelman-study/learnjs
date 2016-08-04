@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>tryCatch</title>
+</head>
+<body>
+	<script>
+	// синтаксис
+
+	try {
+	  // код ...
+	} catch (err) {
+	  // обработка ошибки
+	  err.name;
+	  err.message;
+	  err.stack;
+
+	}
+
+	// В блоке try если происходит ошибка, то код прерывается, выводится в блоке catch и дальше продолжается, если ошибки нет, то catch перепрыгивается
+
+	// try..catch рассматривает только семантически ошибке (не синтаксические)
+
+	// try..catch работает только в синхронном коде
+
+	// Если нужно ложить ошибку внутри setTimeout/setInterval необходимо поместить try..catch внутрь функции
+
+	// типы объекта ошибок
+		// name - тип ошибки
+		// message - детали об ошибке
+		// stack - последовательность вызовов, которые привели к ошибке
+	</script>
+	<!-- ... -->
+	<script>
+	throw obj // генерирует ошибку
+
+	// пример
+	var data = '{ "age": 30 }'; // данные неполны
+	try {
+	  var user = JSON.parse(data); // <-- выполнится без ошибок
+	  if (!user.name) {
+	    throw new SyntaxError("Данные некорректны");
+	  }
+	  alert( user.name );
+	} catch (e) {
+	  alert( "Извините, в данных ошибка" );
+	}
+
+	</script>
+	<!-- /// -->
+	<script>
+
+	throw e // пробрасывание ошибок если она нам не нужна
+
+	function readData() {
+	  var data = '{ "name": "Вася", "age": 30 }';
+	  try {
+	    // ...
+	    blabla(); // ошибка!
+	  } catch (e) {
+	    // ...
+	    if (e.name != 'SyntaxError') {
+	      throw e; // пробрасываем
+	    }
+	  }
+	}
+	try {
+	  readData();
+	} catch (e) {
+	  alert( "Поймал во внешнем catch: " + e ); // ловим
+	}
+	</script>
+	<!-- /// -->
+	<script>
+	function ReadError(message, cause) {
+	  this.message = message;
+	  this.cause = cause;
+	  this.name = 'ReadError';
+	  this.stack = cause.stack;
+	}
+
+	function readData() {
+	  var data = '{ bad data }';
+	  try {
+	    // ...
+	    JSON.parse(data);
+	    // ...
+	  } catch (e) {
+	    // ...
+	    if (e.name == 'URIError') {
+	      throw new ReadError("Ошибка в URI", e);
+	    } else if (e.name == 'SyntaxError') {
+	      throw new ReadError("Синтаксическая ошибка в данных", e);
+	    } else {
+	      throw e; // пробрасываем
+	    }
+	  }
+	}
+
+	try {
+	  readData();
+	} catch (e) {
+	  if (e.name == 'ReadError') {
+	    alert( e.message );
+	    alert( e.cause ); // оригинальная ошибка-причина
+	  } else {
+	    throw e;
+	  }
+	}
+	// Этот подход называют «оборачиванием» исключения, поскольку мы берём ошибки «более низкого уровня» и «заворачиваем» их в ReadError, которая соответствует текущей задаче.
+	</script>
+	<!-- /// -->
+	<script>
+	// расширенный синтаксис
+
+	try {
+	   .. пробуем выполнить код ..
+	} catch(e) {
+	   .. перехватываем исключение ..
+	} finally {
+	   .. выполняем всегда даже при return ..
+	}
+	</script>
+
+	<script>
+	// если ошибка вне блока try..catch то можно ее вызвать
+	window.onerror = function(message, url, lineNumber) {
+	    alert("Поймана ошибка, выпавшая в глобальную область!\n" +
+	      "Сообщение: " + message + "\n(" + url + ":" + lineNumber + ")");
+	  };
+	// при любой ошибке будет сработана функция window.oneerror
+	// Как правило, роль window.onerror заключается в том, чтобы не оживить скрипт – скорее всего, это уже невозможно, а в том, чтобы отослать сообщение об ошибке на сервер, где разработчики о ней узнают.
+	</script>
+
+
+</body>
+</html>

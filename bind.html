@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bind</title>
+</head>
+<body>
+	<p>мы хотим передать метод объекта куда-то в другое место кода, откуда он потом может быть вызван</p>
+	<p>Функция сама по себе не запоминает контекст выполнения.</p>
+	<script>
+		var user = {
+		  firstName: "Вася",
+		  sayHi: function() {
+		    alert( this.firstName );
+		  }
+		};
+
+		setTimeout(user.sayHi, 1000); // undefined (не Вася!)
+		// setTimeout получил user.sayHi но не ее контекст
+	</script>
+	<p>Решения:</p>
+	<ul>
+		<li>Сделать обертку
+			<script>
+				setTimeout(function(){user.sayHi, 1000})
+			</script>
+			Ошибка может быть в том, что за секунду может быть измененно значение user..
+		</li>
+		<li>
+			Написать своб функцию
+			<script>
+			function bind(func, context) {
+			  return function() { // (*)
+			    return func.apply(context, arguments);
+			  };
+			}
+			var user = {
+			  firstName: "Вася",
+			  sayHi: function() {
+			    alert( this.firstName );
+			  }
+			};
+			setTimeout(bind(user.sayHi, user), 1000);
+			</script>
+			bind(f, "Context") привязывает "Context" в качестве this для f.
+		</li>
+		<li>
+			Встроенный bind
+			var wrapper = func.bind(context[, arg1, arg2...])
+			Методы bind и call/apply близки по синтаксису, но есть важнейшее отличие.
+			Методы call/apply вызывают функцию с заданным контекстом и аргументами.
+			А bind не вызывает функцию. Он только возвращает «обёртку», которую мы можем вызвать позже, и которая передаст вызов в исходную функцию, с привязанным контекстом.
+			<script>
+			var user = {
+			  firstName: "Вася",
+			  sayHi: function() {
+			    alert( this.firstName );
+			  }
+			};
+
+			// setTimeout( bind(user.sayHi, user), 1000 );
+			setTimeout(user.sayHi.bind(user), 1000); // аналог через встроенный метод
+			</script>
+		</li>
+	</ul>
+</body>
+</html>

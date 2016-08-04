@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Attributes</title>
+</head>
+<body>
+	Пользовательские DOM-свойства:
+	- Могут иметь любое значение.
+	- Названия свойств чувствительны к регистру.
+	- Работают за счет того, что DOM-узлы являются объектами JavaScript.
+
+
+	Доступ к атрибутам осуществляется при помощи стандартных методов:
+	- elem.hasAttribute(name) – проверяет наличие атрибута
+	- elem.getAttribute(name) – получает значение атрибута
+	- elem.setAttribute(name, value) – устанавливает атрибут
+	- elem.removeAttribute(name) – удаляет атрибут
+	Также все атрибуты элемента можно получить с помощью свойства elem.attributes, которое содержит псевдо-массив объектов типа Attr.
+
+
+	<input id="input" type="checkbox" checked>
+	<script>
+	  // работа с checked через атрибут
+	  alert( input.getAttribute('checked') ); // пустая строка
+	  input.removeAttribute('checked'); // снять галочку
+
+	  // работа с checked через свойство
+	  alert( input.checked ); // false <-- может быть только true/false
+	  input.checked = true; // поставить галочку
+	</script>
+
+
+	Чаще синхронизация – односторонняя: свойство зависит от атрибута, но не наоборот.
+	Например, при изменении свойства input.value атрибут input.getAttribute('value') не меняется:
+	<body>
+	  <input id="input" type="text" value="markup">
+	  <script>
+	    input.setAttribute('value', 'new'); // поменяли атрибут
+
+	    alert( input.value ); // 'new', input.value изменилось!
+	  </script>
+	</body>
+	Эту особенность можно красиво использовать.
+	Получается, что атрибут input.getAttribute('value') хранит оригинальное (исходное) значение даже после того, как пользователь заполнил поле и свойство изменилось.
+	Например, можно взять изначальное значение из атрибута и сравнить со свойством, чтобы узнать, изменилось ли значение. А при необходимости и перезаписать свойство атрибутом, отменив изменения.
+
+	Методы classList:
+	- elem.classList.contains("class") – возвращает true/false, в зависимости от того, есть ли у элемента класс class.
+	- elem.classList.add/remove("class") – добавляет/удаляет класс class
+	- elem.classList.toggle("class") – если класса class нет, добавляет его, если есть – удаляет.
+	Кроме того, можно перебрать классы через for, так как classList – это псевдо-массив.
+
+
+
+	Для нестандартных атрибутов DOM-свойство не создаётся.
+
+	<div id="elem" href="http://ya.ru" about="Elephant"></div>
+
+	<script>
+	  alert( elem.id ); // elem
+	  alert( elem.about ); // undefined
+	</script>
+	
+
+	Нестандартные атрибуты иногда используют для CSS.
+	Почему именно атрибут? Разве нельзя было сделать классы .order-state-new, .order-state-pending, order-state-canceled?
+	Конечно можно, но манипулировать атрибутом из JavaScript гораздо проще.
+
+	<div id="elem" data-about="Elephant" data-user-location="street">
+	  По улице прошёлся слон. Весьма красив и толст был он.
+	</div>
+	<script>
+	  alert( elem.dataset.about ); // Elephant
+	  alert( elem.dataset.userLocation ); // street
+	</script>
+
+	Для того, чтобы избежать проблем со старыми IE, а также для более короткого и понятного кода старайтесь везде использовать свойства, а атрибуты – только там, где это действительно нужно.
+
+
+
+</body>
+</html>

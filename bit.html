@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Перевод в системы счисления</title>
+</head>
+<body>
+	<h1>Перевод в системы счисления</h1>
+	<p>Исходное число - <span id="def-value">1110001</span></p>
+	<p>В двоичной системе - <span id="2-value"></span></p>
+	<p>В десятиричной системе - <span id="10-value"></span></p>
+	<script>
+		var defValue = document.getElementById('def-value').innerHTML,
+			twoValue = parseInt(defValue,2),
+			tenValue = twoValue.toString(2);
+		document.getElementById('2-value').innerHTML = twoValue;
+		document.getElementById('10-value').innerHTML = tenValue;
+
+
+	</script>
+</body>
+</html>

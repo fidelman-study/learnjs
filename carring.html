@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Carring</title>
+</head>
+<body>
+	<p>Карринг (currying) или каррирование – термин функционального программирования, который означает создание новой функции путём фиксирования аргументов существующей.</p>
+	<script>
+	function mul(a, b) {
+	  return a * b;
+	};
+	// double умножает только на два
+	var double = mul.bind(null, 2); // контекст фиксируем null, он не используется
+
+	alert( double(3) ); // = mul(2, 3) = 6
+	alert( double(4) ); // = mul(2, 4) = 8
+	alert( double(5) ); // = mul(2, 5) = 10
+	</script>
+</body>
+</html>

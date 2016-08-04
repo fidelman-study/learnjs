@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+
+	Функциональный стиль
+
+	<script>
+		function Animal(name) {
+			this.name = name;
+			this.speed = 0;
+
+			this.run = function(speed) {
+				this.speed += speed;
+				alert( this.name + ' бежит, скорость ' + this.speed );
+			};
+
+			this.stop = function() {
+				this.speed = 0;
+				alert( this.name + ' стоит' );
+			};
+
+			var animal = new Animal('Зверь');
+
+			alert( animal.speed ); // 0, начальная скорость
+			animal.run(3); // Зверь бежит, скорость 3
+			animal.run(10); // Зверь бежит, скорость 13
+			animal.stop(); // Зверь стоит		
+
+		}
+
+	</script>
+
+
+	Прототипный стиль
+
+	<script>
+		function Animal(name) {
+			this.name = name;
+			this.speed = 0;
+		}
+
+		Animal.prototype.run = function(speed) {
+			this.speed += speed;
+			alert( this.name + ' бежит, скорость ' + this.speed );
+		};
+
+		Animal.prototype.stop = function() {
+			this.speed = 0;
+			alert( this.name + ' стоит' );
+		};
+
+		alert( animal.speed ); // 0, начальная скорость
+		animal.run(3); // Зверь бежит, скорость 3
+		animal.run(10); // Зверь бежит, скорость 13
+		animal.stop(); // Зверь стоит	
+
+	</script>
+
+
+	Достоинства
+	Функциональный стиль записывает в каждый объект и свойства и методы, а прототипный – только свойства. Поэтому прототипный стиль – быстрее и экономнее по памяти.
+	Такое наследование лучше функционального стиля, так как не дублирует методы в каждом объекте.
+	Зачастую вызов конструктора имеет какие-то побочные эффекты, например влияет на документ. Если конструктор родителя имеет какое-то поведение, которое нужно переопределить в потомке, то в функциональном стиле это невозможно.
+
+	Недостатки
+	При создании методов через прототип, мы теряем возможность использовать локальные переменные как приватные свойства, у них больше нет общей области видимости с конструктором.
+
+	Таким образом, прототипный стиль – быстрее и экономнее, но немного менее удобен.
+
+
+	<script>
+
+		// К примеру, есть у нас приватное свойство name и метод sayHi в функциональном стиле ООП:
+
+		function Animal(name) {
+		  this.sayHi = function() {
+		    alert( name );
+		  };
+		}
+
+		var animal = new Animal("Зверь");
+		animal.sayHi(); // Зверь
+
+		// При задании методов в прототипе мы не сможем её так оставить, ведь методы находятся вне конструктора, у них нет общей области видимости, поэтому приходится записывать name в сам объект, обозначив его как защищённое:
+
+		function Animal(name) {
+		  this._name = name;
+		}
+
+		Animal.prototype.sayHi = function() {
+		  alert( this._name );
+		}
+
+		var animal = new Animal("Зверь");
+		animal.sayHi(); // Зверь
+
+	</script>
+
+
+	<script>
+	function CoffeeMachine(power) {
+	  var waterAmount = 0;
+
+	  var WATER_HEAT_CAPACITY = 4200;
+
+	  function getTimeToBoil() {
+	    return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+	  }
+
+	  this.run = function() {
+	    setTimeout(function() {
+	      alert( 'Кофе готов!' );
+	    }, getTimeToBoil());
+	  };
+
+	  this.setWaterAmount = function(amount) {
+	    waterAmount = amount;
+	  };
+
+	}
+
+	var coffeeMachine = new CoffeeMachine(10000);
+	coffeeMachine.setWaterAmount(50);
+	coffeeMachine.run();
+
+	//////////////---------------------------------//////////////
+
+	function CoffeeMachine (power) {
+	  this._waterAmount = 0;
+	  this._power = power; // приватные для всех
+	}
+
+	CoffeeMachine.prototype.run = function() { // публичные для конкретного
+	  setTimeout(function() {
+	    alert('Кофе готов!');
+	  }, this._getTimeToBoil());
+	};
+
+	CoffeeMachine.prototype.setWaterAmount = function(amount) { //публичные
+	  this._waterAmount = amount;
+	};
+
+	CoffeeMachine.prototype.WETER_HEAT_CAPACITY = 4200; // защищенные
+
+	CoffeeMachine.prototype._getTimeToBoil = function() { //приватные
+	  return this._waterAmount * this.WETER_HEAT_CAPACITY * 80 / this._power;
+	};
+	</script>
+
+</body>
+</html>

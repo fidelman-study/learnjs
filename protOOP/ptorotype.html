@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Prototype</title>
+</head>
+<body>
+	Создание прототипа через конструктор
+
+	<script>
+
+		var animal = {
+			eats: true
+		};
+
+
+		function Rabbit(name) {
+			this.name = name;
+			this.__proto__ = animal
+		}
+
+		var rabbit = new Rabbit('Bunny');
+		alert(rabbit.eats) //true
+
+		// Такой подход не работает в IE10-
+	</script>
+
+	Пример который работает везде
+
+	<script>
+
+		var animal = {
+			eats: true
+		};
+
+		function Rabbit(name) {
+			this.name = name;
+		}
+
+		Rabbit.prototype = animal;
+
+		var rabbit = new Rabbit('Bunny');
+
+		alert(rabbit.eats); // true
+
+		// Установка Rabbit.prototype = animal буквально говорит интерпретатору следующее: "При создании объекта через new Rabbit запиши ему __proto__ = animal".
+
+		// Такой смысл есть только у конструктора
+
+
+
+
+		function Rabbit() {};
+		Rabbit.prototype = { // свойство просто задает прототип объектов
+		  eats: true
+		};
+
+		var rabbit = new Rabbit();
+
+		Rabbit.prototype = {}; // очистит прототип но не объект
+		Rabbit.prototype.eats = false; // изменения внесены в прототип но не в объект
+
+		alert( rabbit.eats );
+
+
+	</script>
+
+
+	<script>
+		function User() { }
+
+		var vasya = new User();
+
+		vasya.__proto__.name = "Vasya";
+
+		// свойство name содержится в
+		vasya.__prototo__;
+		User.prototype;
+	</script>
+
+
+
+	«Псевдоклассом» или, более коротко, «классом», называют функцию-конструктор вместе с её prototype. Такой способ объявления классов называют «прототипным стилем ООП».
+
+
+	вместо [].join.call(arguments, '-') лучше писать Array.prototype.join...
+	
+
+	// попытаемся записать свойство в строку:
+	<script>
+	var user = "Вася";
+		user.age = 30;
+	
+		alert( user.age ); // undefined
+	</script>
+	Свойство age было записано во временный объект, который был тут же уничтожен, так что смысла в такой записи немного.
+
+	<script>
+		String.prototype.repeat = function(times) {
+		  return new Array(times + 1).join(this);
+		};
+
+		alert( "ля".repeat(3) ); // ляляля
+	</script>
+
+
+	--Модификация встроенных прототипов--
+	Достоинства
+		Методы в прототипе автоматически доступны везде, их вызов прост и красив.
+	Недостатки
+		Новые свойства, добавленные в прототип из разных мест, могут конфликтовать между собой. Представьте, что вы подключили две библиотеки, которые добавили одно и то же свойство в прототип, но определили его по-разному. Конфликт неизбежен.
+		Изменения встроенных прототипов влияют глобально, на все-все скрипты, делать их не очень хорошо с архитектурной точки зрения.
+	
+	Допустимо изменение прототипа встроенных объектов, которое добавляет поддержку метода из современных стандартов в те браузеры, где её пока нет.
+
+	<script>
+	Function.prototype.defer = function(ms) {
+	  var f = this;
+	  return function() {
+	    var args = arguments,
+	      context = this;
+	    setTimeout(function() {
+	      f.apply(context, args);
+	    }, ms);
+	  }
+	}
+
+	// проверка
+	function f(a, b) {
+	  alert( a + b );
+	}
+
+	f.defer(1000)(1, 2); // выведет 3 через 1 секунду.
+	</script>
+
+</body>
+</html>
