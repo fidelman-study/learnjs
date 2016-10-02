@@ -13,12 +13,12 @@
 
 		Animal.prototype.run = function(speed) {
 		  this.speed += speed;
-		  alert( this.name + ' бежит, скорость ' + this.speed );
+		  alert( this.name + ' Р±РµР¶РёС‚, СЃРєРѕСЂРѕСЃС‚СЊ ' + this.speed );
 		};
 
 		Animal.prototype.stop = function() {
 		  this.speed = 0;
-		  alert( this.name + ' стоит' );
+		  alert( this.name + ' СЃС‚РѕРёС‚' );
 		};
 	</script>
 
@@ -30,27 +30,27 @@
 
 		Rabbit.prototype.jump = function() {
 		  this.speed++;
-		  alert( this.name + ' прыгает' );
+		  alert( this.name + ' РїСЂС‹РіР°РµС‚' );
 		};
 
-		var rabbit = new Rabbit('Кроль');
+		var rabbit = new Rabbit('РљСЂРѕР»СЊ');
 	</script>
 
 	<script>
 		Rabbit.prototype.__proto__ = Animal.prototype;
 
-		// либо для IE-10
-		Rabbit.prototype = Object.create(Animal.prototype); // cтавится после конструктора, так как перезапишет прототип
+		// Р»РёР±Рѕ РґР»СЏ IE-10
+		Rabbit.prototype = Object.create(Animal.prototype); // cС‚Р°РІРёС‚СЃСЏ РїРѕСЃР»Рµ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°, С‚Р°Рє РєР°Рє РїРµСЂРµР·Р°РїРёС€РµС‚ РїСЂРѕС‚РѕС‚РёРї
 
 		
-		// Желательно и constructor сохранить
+		// Р–РµР»Р°С‚РµР»СЊРЅРѕ Рё constructor СЃРѕС…СЂР°РЅРёС‚СЊ
 		Rabbit.prototype.constructor = Rabbit;
 	</script>
 
 	<script>
-	// вместо Rabbit.prototype = Object.create(Animal.prototype)
+	// РІРјРµСЃС‚Рѕ Rabbit.prototype = Object.create(Animal.prototype)
 	Rabbit.prototype = new Animal();
-	// так делать не рекомендуется, так как мы хотим унаследовать методы а не создавать новый объект
+	// С‚Р°Рє РґРµР»Р°С‚СЊ РЅРµ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ, С‚Р°Рє РєР°Рє РјС‹ С…РѕС‚РёРј СѓРЅР°СЃР»РµРґРѕРІР°С‚СЊ РјРµС‚РѕРґС‹ Р° РЅРµ СЃРѕР·РґР°РІР°С‚СЊ РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚
 	</script>
 
 
@@ -66,16 +66,16 @@
 	  this.speed = 0;
 	}
 
-	// если конструкторы одинаковы то можно заменить содержание конструктора Rabbit на 
+	// РµСЃР»Рё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ РѕРґРёРЅР°РєРѕРІС‹ С‚Рѕ РјРѕР¶РЅРѕ Р·Р°РјРµРЅРёС‚СЊ СЃРѕРґРµСЂР¶Р°РЅРёРµ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° Rabbit РЅР° 
 	function Rabbit(name) {
 		Animal.apply(this, arguments);
 	}
 
 	</script>
 
-	Мы можем свободно создать методы как у прототипа для своих целей
+	РњС‹ РјРѕР¶РµРј СЃРІРѕР±РѕРґРЅРѕ СЃРѕР·РґР°С‚СЊ РјРµС‚РѕРґС‹ РєР°Рє Сѓ РїСЂРѕС‚РѕС‚РёРїР° РґР»СЏ СЃРІРѕРёС… С†РµР»РµР№
 
-	Можем расширять мтеоды прототипа
+	РњРѕР¶РµРј СЂР°СЃС€РёСЂСЏС‚СЊ РјС‚РµРѕРґС‹ РїСЂРѕС‚РѕС‚РёРїР°
 	<script>
 	Rabbit.prototype.run = function() {
 		Animal.prototype.run.apply(this, arguments);
